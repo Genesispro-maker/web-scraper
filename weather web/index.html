@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>weather website</title>
+
+    <link rel="stylesheet" href="/weather web/index.css">
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
+
+</head>
+<body>
+    <div class="app">
+
+
+
+
+        <!--search bar-->
+        <div class="searchbar">
+
+            <input type="text" id="searchinput" placeholder="search by city">
+
+                <ion-icon name="search-outline" class="searchicon" onclick="getweather()"></ion-icon>
+        </div>
+  
+
+
+    <!--date and time-->
+
+    <div class="info">
+        <p id="date"></p>
+        <h3 class="city"></h3>
+    </div>
+
+
+    <!--temp image-->
+          <div id="tempimg"></div>
+ 
+
+    <!--description-->
+       <div class="description"></div>
+
+    <div class="temp">
+
+    </div>
+
+    <!--extra info-->
+           <div class="extrainfo">
+                 <div class="cols">
+                    <div class="in">
+                        <h5>Highs</h5>
+                        <p class="tempmax"></p>
+                    </div>
+                 </div>
+                  <div class="cols">
+                    <div class="in">
+                        <h5>Lows</h5>
+                        <p class="tempmin"></p>
+                    </div>
+                 </div>
+           </div>
+    </div>
+
+
+
+
+    <script>
+        const date = document.getElementById("date");
+const city = document.querySelector(".city");
+const temperature = document.querySelector(".temp")
+const img = document.querySelector("#tempimg")
+
+const describe = document.querySelector(".description")
+
+const tempmax = document.querySelector(".tempmax")
+
+const tempmin = document.querySelector(".tempmin")
+
+
+
+const months = ["january", "feburary", "march", "april", "may", "June", "july", "august", "septemeber", "octonthober", "november", "december"]
+
+
+const upper = months.map((mon) => {
+    let transform = mon.toUpperCase()
+    return transform
+})
+
+let dateobj = new Date();
+
+var month = upper[dateobj.getUTCMonth()]
+
+let day = dateobj.getDate();
+
+let year = dateobj.getUTCFullYear();
+
+let time = dateobj.getUTCHours();
+
+
+date.innerHTML = `${month} ${day} ${year}`;
+
+
+const app = document.querySelector(".app")
+
+async function getweather(){
+    try{
+        const cityname = document.querySelector("#searchinput").value;
+           const weatherdata = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=4775914a7c9497cdd9023cf6f881e01e&units=metric`, {
+               headers: {
+                   Accept: "application/json"
+               }
+           });
+
+           const weatherfetch = await weatherdata.json();
+           console.log(weatherfetch)
+
+           city.innerHTML = `${weatherfetch.name}`;
+        
+           describe.innerHTML = `${weatherfetch.weather[0].main}`
+              
+
+             temperature.innerHTML = `<h2>${Math.round(weatherfetch.main.temp)} C</h2>`
+             tempmax.innerHTML = `${weatherfetch.main.temp_max} C`
+              tempmin.innerHTML = `${weatherfetch.main.temp_min} C`
+
+
+    }
+    catch(error){
+         console.log(error);
+    }
+}
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
