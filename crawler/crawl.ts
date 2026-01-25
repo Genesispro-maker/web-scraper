@@ -18,9 +18,7 @@ function CSVEscape(field: string) {
 }
 
 class Espoinage{
-   private pageData: Record<string, any>
 
-   
   private async getH1fromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
      try{
