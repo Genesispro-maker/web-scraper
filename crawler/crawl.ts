@@ -92,13 +92,7 @@ private async  getURlsfromhtml(html: string, baseURL: string){
 }   
 
         
-private ExtractedPage({
-  html,
-  pageURL,
-}: {
-  html: string;
-  pageURL: string;
-}) {
+private ExtractedPage({html, pageURL}: {html: string; pageURL: string;}){
   return {
     url: pageURL,
     h1: this.getH1fromHTML(html),
@@ -131,12 +125,7 @@ async getHTML(url: string): Promise<string | null> {
 }   
 
 
-
-    async crawlPage(
-  baseURL: string,
-  currentURL: string,
-  pages: Record<string, any>,
-) {
+async crawlPage(baseURL: string, currentURL: string, pages: Record<string, any>) {
   const base = new URL(baseURL);
   const current = new URL(currentURL);
 
