@@ -1,6 +1,6 @@
 # Web-Crawler
 
-## Crawl Any website
+## Crawl Any website (but it's pretty slow asf)
 
 > Built From Scratch by [me](https://github.com/Genesispro-maker)
 
