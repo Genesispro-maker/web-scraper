@@ -10,7 +10,18 @@ function NormalizeURls(url: string){
 }
 
 
-function getH1fromHTML(html: string): string{
+function CSVEscape(field: string) {
+  const str = field ?? "";
+  const needsQuoting = /[",\n]/.test(str);
+  const escaped = str.replace(/"/g, '""');
+  return needsQuoting ? `"${escaped}"` : escaped;
+}
+
+class Espoinage{
+   private pageData: Record<string, any>
+
+   
+  private async getH1fromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
      try{
         const domNodes = new JSDOM(html, {
@@ -25,10 +36,9 @@ function getH1fromHTML(html: string): string{
         return ''
      }
 }
+      
 
-
-
-function getFirstParagraphfromHTML(html: string): string{
+ private async getFirstParagraphfromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
      try{
         const domNodes = new JSDOM(html, {
@@ -44,10 +54,8 @@ function getFirstParagraphfromHTML(html: string): string{
         return ''
      }
 }
-
-
-
-function getURlsfromhtml(html: string, baseURL: string){
+ 
+private async  getURlsfromhtml(html: string, baseURL: string){
     const {JSDOM} = require("jsdom")
     const urls : string[] = [] 
     try{
@@ -81,10 +89,10 @@ function getURlsfromhtml(html: string, baseURL: string){
     }
 
     return urls
-}
+}   
 
-
-function ExtractedPage({
+        
+private ExtractedPage({
   html,
   pageURL,
 }: {
@@ -93,15 +101,14 @@ function ExtractedPage({
 }) {
   return {
     url: pageURL,
-    h1: getH1fromHTML(html),
-    first_paragraph: getFirstParagraphfromHTML(html),
-    outgoing_links: getURlsfromhtml(html, pageURL),
+    h1: this.getH1fromHTML(html),
+    first_paragraph: this.getFirstParagraphfromHTML(html),
+    outgoing_links: this.getURlsfromhtml(html, pageURL),
   };
 }
-
-
-
-async function getHTML(url: string): Promise<string | null> {
+       
+           
+async getHTML(url: string): Promise<string | null> {
   try {
     const response = await fetch(url);
 
@@ -121,11 +128,11 @@ async function getHTML(url: string): Promise<string | null> {
     console.log(`Fetch failed for ${url}`);
     return null;
   }
-}
+}   
 
 
 
-async function crawlPage(
+    async crawlPage(
   baseURL: string,
   currentURL: string,
   pages: Record<string, any>,
@@ -138,32 +145,26 @@ async function crawlPage(
   const normalizedURL = NormalizeURls(currentURL);
   if (pages[normalizedURL]) return pages;
 
-  const html = await getHTML(currentURL);
+  const html = await this.getHTML(currentURL);
 
-  pages[normalizedURL] = ExtractedPage({
+  pages[normalizedURL] = this.ExtractedPage({
     html,
     pageURL: currentURL,
   });
 
-  const nextURLs = getURlsfromhtml(html, baseURL);
+  const nextURLs = await this.getURlsfromhtml(html, baseURL);
   for (const nextURL of nextURLs) {
-    await crawlPage(baseURL, nextURL, pages);
+    await this.crawlPage(baseURL, nextURL, pages);
   }
 
   return pages;
 }
 
+   
 
 
-function CSVEscape(field: string) {
-  const str = field ?? "";
-  const needsQuoting = /[",\n]/.test(str);
-  const escaped = str.replace(/"/g, '""');
-  return needsQuoting ? `"${escaped}"` : escaped;
-}
 
-
-function writeCSVReport(pageData: Record<string, any>, filename = "report.csv"): void {
+writeCSVReport(pageData: Record<string, any>, filename = "report.csv"): void {
   const fs = require("fs");
   const path = require("path");
 
@@ -194,14 +195,20 @@ function writeCSVReport(pageData: Record<string, any>, filename = "report.csv"):
 
 
 
+}
+
+
+
 async function main(){
     const baseURL = 'https://www.nike.com/w/shop-your-store-8b4bh'
     const pages = {}
 
-    await crawlPage(baseURL, baseURL, pages)
+    const crawler = new Espoinage()
+
+    await crawler.crawlPage(baseURL, baseURL, pages)
 
 
-    writeCSVReport(pages)
+    crawler.writeCSVReport(pages)
     console.log("report generated")
 }
 
