@@ -35,6 +35,25 @@ class Espoinage{
      }
 }
       
+  private async getDivsfromHTML(html: string){
+     const {JSDOM} = require("jsdom")
+
+     try{
+        const domNodes = new JSDOM(html)
+        const doc = domNodes.window.document
+        const div = doc.querySelectorAll("div")
+
+        div.forEach((divs) => {
+           return (divs.textContent ?? "").trim()
+        })
+     }catch(Err){
+        if(Err instanceof Error){
+            console.log(Err.message)
+        }
+     }
+  }
+
+
 
  private async getFirstParagraphfromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
@@ -53,7 +72,7 @@ class Espoinage{
      }
 }
  
-private async  getURlsfromhtml(html: string, baseURL: string){
+private async getURlsfromhtml(html: string, baseURL: string){
     const {JSDOM} = require("jsdom")
     const urls : string[] = [] 
     try{
@@ -96,6 +115,7 @@ private ExtractedPage({html, pageURL}: {html: string; pageURL: string;}){
     h1: this.getH1fromHTML(html),
     first_paragraph: this.getFirstParagraphfromHTML(html),
     outgoing_links: this.getURlsfromhtml(html, pageURL),
+    divs: this.getDivsfromHTML(html)
   };
 }
        
@@ -187,7 +207,7 @@ writeCSVReport(pageData: Record<string, any>, filename = "report.csv"): void {
 
 
 async function main(){
-    const baseURL = 'https://www.nike.com/w/shop-your-store-8b4bh'
+    const baseURL = 'https://blog.boot.dev'
     const pages = {}
 
     const crawler = new Espoinage()
