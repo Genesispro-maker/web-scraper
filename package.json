@@ -13,7 +13,7 @@
   "keywords": [],
   "author": "Genesis-pro",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Genesispro-maker/web-scraper/issues"
   },
@@ -21,5 +21,8 @@
   "devDependencies": {
     "@types/node": "^25.0.10",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "jsdom": "^27.4.0"
   }
 }

@@ -1,4 +1,4 @@
-export function NormalizeURLS(url: string){
+function NormalizeURLS(url: string){
     const urlobject = new URL(url)
     let fullURL = `${urlobject.host}${urlobject.pathname}`
 
@@ -8,3 +8,5 @@ export function NormalizeURLS(url: string){
 
     return fullURL
 }
+
+module.exports = NormalizeURLS;
