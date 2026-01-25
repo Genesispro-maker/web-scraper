@@ -1,0 +1,25 @@
+{
+  "name": "web-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Genesispro-maker/web-scraper.git"
+  },
+  "keywords": [],
+  "author": "Genesis-pro",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Genesispro-maker/web-scraper/issues"
+  },
+  "homepage": "https://github.com/Genesispro-maker/web-scraper#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "typescript": "^5.9.3"
+  }
+}
