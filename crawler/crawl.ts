@@ -71,6 +71,25 @@ class Espoinage{
         return ''
      }
 }
+
+  private async getStyleSheets(html: string, baseURL: string){
+    const {JSDOM} = require("jsdom")
+    const dom = new JSDOM(html)
+    const urls: Array<string> = []
+
+    const doc = dom.window.document
+    const link = doc.querySelectorAll("link[rel='stylesheet']")
+    link.forEach((links) => {
+        const href = links.getAttribute("href")
+        if(!href) return
+
+        try{
+            urls.push(new URL(href, baseURL).toString())
+        }catch{}
+    })
+
+    return urls
+  }
  
 private async getURlsfromhtml(html: string, baseURL: string){
     const {JSDOM} = require("jsdom")
@@ -115,7 +134,8 @@ private ExtractedPage({html, pageURL}: {html: string; pageURL: string;}){
     h1: this.getH1fromHTML(html),
     first_paragraph: this.getFirstParagraphfromHTML(html),
     outgoing_links: this.getURlsfromhtml(html, pageURL),
-    divs: this.getDivsfromHTML(html)
+    divs: this.getDivsfromHTML(html),
+    styleSheets: this.getStyleSheets(html, pageURL)
   };
 }
        
@@ -180,7 +200,8 @@ writeCSVReport(pageData: Record<string, any>, filename = "report.csv"): void {
     "h1",
     "first_paragraph",
     "outgoing_link_urls",
-    "image_urls",
+    "web-divs",
+    "styleSheets"
   ];
 
   const rows: string[] = [headers.join(",")];
@@ -191,6 +212,8 @@ writeCSVReport(pageData: Record<string, any>, filename = "report.csv"): void {
       CSVEscape(page.h1),
       CSVEscape(page.first_paragraph),
       CSVEscape(page.outgoing_links.join(";")),
+      CSVEscape(page.div),
+      CSVEscape(page.stylesheet)
     ];
 
     rows.push(row.join(","));
