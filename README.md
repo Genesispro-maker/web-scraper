@@ -33,9 +33,10 @@ cd crawler && npm install
 
 # yarn
 cd crawler && yarn
-
+```
 
 3. Run Files
 
-```bash
+```
 node crawl.ts
+```
