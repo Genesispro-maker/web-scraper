@@ -37,5 +37,5 @@ cd crawler && yarn
 
 3. Run Files
 
-#node
+```bash
 node crawl.ts
