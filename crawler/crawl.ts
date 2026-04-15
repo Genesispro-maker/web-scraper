@@ -5,10 +5,8 @@ function NormalizeURls(url: string){
     if(fullURL.slice(0, -1) === "/"){
         fullURL = fullURL.slice(0, -1)
     }
-
     return fullURL
 }
-
 
 function CSVEscape(field: string) {
   const str = field ?? "";
@@ -18,7 +16,6 @@ function CSVEscape(field: string) {
 }
 
 class Espoinage{
-
   private async getH1fromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
      try{
@@ -53,8 +50,6 @@ class Espoinage{
      }
   }
 
-
-
  private async getFirstParagraphfromHTML(html: string): Promise<string>{
     const {JSDOM} = require("jsdom")
      try{
@@ -87,7 +82,6 @@ class Espoinage{
             urls.push(new URL(href, baseURL).toString())
         }catch{}
     })
-
     return urls
   }
  
@@ -127,7 +121,6 @@ private async getURlsfromhtml(html: string, baseURL: string){
     return urls
 }   
 
-        
 private ExtractedPage({html, pageURL}: {html: string; pageURL: string;}){
   return {
     url: pageURL,
@@ -138,8 +131,7 @@ private ExtractedPage({html, pageURL}: {html: string; pageURL: string;}){
     styleSheets: this.getStyleSheets(html, pageURL)
   };
 }
-       
-           
+               
 async getHTML(url: string): Promise<string | null> {
   try {
     const response = await fetch(url);
